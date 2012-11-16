@@ -1,0 +1,20 @@
+#!/bin/ksh
+
+if [[ -z $JAVA_HOME ]]; then
+  for jh in \
+    /opt/local/java/sun6 \
+    /usr/jdk/instances/jdk1.6.0 \
+    /usr/java \
+    /usr
+  do
+    if [[ -x $jh/bin/java ]]; then
+      export JAVA_HOME=$jh
+      break
+    fi
+  done
+fi
+
+echo "'$@'"
+MAVEN_OPTS="-Xmx512m " \
+mvn -e exec:java -Dexec.mainClass=org.sysmgr.mailbucket.App -Dexec.args="$*"
+
